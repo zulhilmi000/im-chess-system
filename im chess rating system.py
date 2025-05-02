@@ -12,33 +12,49 @@ def calculation_sec (rank_player2,rank_player1):
     return total
 
 #SEARCH RATING
+
 def search_rating():
-        #STORE IN DICTIONARY
-        ratings = {}
-        try:
-            with open(TEXT_FILE, "r") as file:
-                lines = file.readlines()[1:] 
-                for line in lines:
-                    parts = line.strip().split()
-                    #CHOOSE THE UPPER ONE (WITHOUR HEADER)
-                    if len(parts) >= 2:
-                        name = parts[0]
-                        rating = float(parts[1])
-                        #STORE IN DICTIONARY
-                        ratings[name] = rating
-        #FILE NOT  FOUND DO NOTHING AND KEEP MOVE ON
-        except FileNotFoundError:
-            pass
-        return ratings
+
+    #STORE IN DICTIONARY
+    ratings = {}
+
+    try:
+        with open(TEXT_FILE, "r") as file:
+            lines = file.readlines()[1:]  
+            for line in lines:
+                parts = line.strip().split()
+
+                #CHOOSE THE UPPER ONE (WITHOUR HEADER)
+
+                if len(parts) >= 3:
+                    name = parts[1]
+                    rating = float(parts[2])
+
+                    #STORE IN DICTIONARY
+
+                    ratings[name] = rating
+
+    #FILE NOT  FOUND PROGRAM WILL DO NOTHING AND KEEP MOVE ON
+
+    except FileNotFoundError:
+        pass
+    return ratings
 
 #SAVE/UPDATE NEW RATING AFTER MATCH 
+
 def save_rating(ratings):
+
     with open(TEXT_FILE, "w") as file:
+
         #WRITE HEADER
-        file.write(f"{'PLAYER':<15}RATING\n")
-        for name, rating in ratings.items():
-            #INSERT NAME AND RATING WITH GOOD INTERFACE 
-            file.write(f"{name.upper():<15}{round(rating, 2):.2f}\n")
+
+        file.write(f"{'NO':<4}{'PLAYER':<15}{'RATING'}\n")
+
+        #INSERT NAME AND RATING WITH CLEAN INTERFACE
+
+        for i, (name, rating) in enumerate(sorted(ratings.items(), key=lambda x: x[1], reverse=True), start=1):
+            file.write(f"{i:<4}{name:<15}{round(rating, 2):.2f}\n")
+
 
 #INTERFACE OF PROGRAM
 
@@ -67,7 +83,7 @@ def FLOW_SYSTEM():
 
         print("\nEnter result from Player 1's perspective (1 = win, 0.5 = draw, 0 = loss):")
         score1 = float(input(f"{name1.upper()} vs {name2.upper()}: "))
-
+    
         #THIS IS FOR PLAYER 2 ,IF PLAYER 1 GOT "1" THEN PLAYER 2 WILL BE "0" MEAN HE LOST 
 
         score2 = 1 - score1
@@ -102,19 +118,19 @@ def FLOW_SYSTEM():
 
         #TELL USER ABOUT CHANGES
 
-        print(f"\nUpdated Ratings (K={K}):")
+        print(f"\nUpdated Ratings:")
         print(f"{name1.upper()}: {round(new_rating1, 2)}")
         print(f"{name2.upper()}: {round(new_rating2, 2)}\n")
 
-        #ask user if they want to continue
-        
+        #ASK CONTINUE OR NOT
+
         stop=str(input("Do you want to continue? (Y/N): ")).upper()
-        #if they don't want to use it anymore it will stop 
-        #if yes then program will be start from player 1 input again
+
         if stop == "N":
             print("Thank you for using this system!")
             break
-        
+
+
 
 FLOW_SYSTEM()
 
