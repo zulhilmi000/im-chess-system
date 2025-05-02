@@ -43,67 +43,78 @@ def save_rating(ratings):
 #INTERFACE OF PROGRAM
 
 def FLOW_SYSTEM():
-    #MAKE VARIABLE FOR DICTONARY 
-    
-    ratings = search_rating()
 
-    #PLAYER NAME
+    while True:
+        #MAKE VARIABLE FOR DICTONARY 
+        
+        ratings = search_rating()
 
-    name1 = input("Enter Player 1 name: ").strip()
-    name2 = input("Enter Player 2 name: ").strip()
+        #PLAYER NAME
 
-    #GET THEIR RATING IF EXIST , IF NOT IT WILL BE DEFAULT
+        name1 = input("Enter Player 1 name: ").strip()
+        name2 = input("Enter Player 2 name: ").strip()
 
-    rank_player1 = ratings.get(name1.upper(), START_RATING)
-    rank_player2 = ratings.get(name2.upper(), START_RATING)
+        #GET THEIR RATING IF EXIST , IF NOT IT WILL BE DEFAULT
 
-    #TELL USER ABOUT CURRENT RATING BEFORE PROCCED
+        rank_player1 = ratings.get(name1.upper(), START_RATING)
+        rank_player2 = ratings.get(name2.upper(), START_RATING)
 
-    print(f"\nCurrent Ratings:\n{name1.upper()}: {rank_player1}\n{name2.upper()}: {rank_player2}")
+        #TELL USER ABOUT CURRENT RATING BEFORE PROCCED
 
-    #ENTER THE RESULT (W/L/D) FROM PLAYER 1 PERSPECTIVE
+        print(f"\nCurrent Ratings:\n{name1.upper()}: {rank_player1}\n{name2.upper()}: {rank_player2}")
 
-    print("\nEnter result from Player 1's perspective (1 = win, 0.5 = draw, 0 = loss):")
-    score1 = float(input(f"{name1.upper()} vs {name2.upper()}: "))
+        #ENTER THE RESULT (W/L/D) FROM PLAYER 1 PERSPECTIVE
 
-    #THIS IS FOR PLAYER 2 ,IF PLAYER 1 GOT "1" THEN PLAYER 2 WILL BE "0" MEAN HE LOST 
+        print("\nEnter result from Player 1's perspective (1 = win, 0.5 = draw, 0 = loss):")
+        score1 = float(input(f"{name1.upper()} vs {name2.upper()}: "))
 
-    score2 = 1 - score1
+        #THIS IS FOR PLAYER 2 ,IF PLAYER 1 GOT "1" THEN PLAYER 2 WILL BE "0" MEAN HE LOST 
 
-    #ASK FOR CONFIRMATION AGAIN BEFORE FINAL TOUCH
+        score2 = 1 - score1
 
-    confirm = input(
-        f"Confirm: {name1.upper()} scored {score1} vs {name2.upper()} — "
-       
-        f"Sure {name1.upper()} {'WON' if score1 == 1 else 'DREW' if score1 == 0.5 else 'LOST'}? (y/n): "
-    ).strip().lower()
+        #ASK FOR CONFIRMATION AGAIN BEFORE FINAL TOUCH
 
-    #IF USER SAY NO THEN THE PROGRAM WILL BE STOP AND NO CHANGES WILL BE MADE
+        confirm = input(
+            f"Confirm: {name1.upper()} scored {score1} vs {name2.upper()} — "
+        
+            f"Sure {name1.upper()} {'WON' if score1 == 1 else 'DREW' if score1 == 0.5 else 'LOST'}? (y/n): "
+        ).strip().lower()
 
-    if confirm != 'y':
-        print("Cancelled. No changes made.")
-        return
-    
-    #CALCULATION FOR NEW RATING
+        #IF USER SAY NO THEN THE PROGRAM WILL BE STOP AND NO CHANGES WILL BE MADE
 
-    new_rating1 = calculation_main(rank_player1, rank_player2, score1)
-    new_rating2 = calculation_main(rank_player2, rank_player1, score2)
+        if confirm != 'y':
+            print("Cancelled. No changes made.")
+            return
+        
+        #CALCULATION FOR NEW RATING
 
-    #CHANGE THE RATING WHEN CALCULATION DONE
+        new_rating1 = calculation_main(rank_player1, rank_player2, score1)
+        new_rating2 = calculation_main(rank_player2, rank_player1, score2)
 
-    ratings[name1.upper()] = new_rating1
-    ratings[name2.upper()] = new_rating2
+        #CHANGE THE RATING WHEN CALCULATION DONE
 
-    #SAVE THE NEW RATING
+        ratings[name1.upper()] = new_rating1
+        ratings[name2.upper()] = new_rating2
 
-    save_rating(ratings)
+        #SAVE THE NEW RATING
 
-    #TELL USER ABOUT CHANGES
+        save_rating(ratings)
 
-    print(f"\nUpdated Ratings (K={K}):")
-    print(f"{name1.upper()}: {round(new_rating1, 2)}")
-    print(f"{name2.upper()}: {round(new_rating2, 2)}")
+        #TELL USER ABOUT CHANGES
 
+        print(f"\nUpdated Ratings (K={K}):")
+        print(f"{name1.upper()}: {round(new_rating1, 2)}")
+        print(f"{name2.upper()}: {round(new_rating2, 2)}\n")
+
+        #ask user if they want to continue
+        
+        stop=str(input("Do you want to continue? (Y/N): ")).upper()
+        #if they don't want to use it anymore it will stop 
+        #if yes then program will be start from player 1 input again
+        if stop == "N":
+            print("Thank you for using this system!")
+            break
+        
 
 FLOW_SYSTEM()
 
